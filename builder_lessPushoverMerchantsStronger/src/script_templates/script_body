@@ -1,0 +1,18 @@
+		;;;;;;;;;; #ACTOR#
+
+		; get actor's personality
+
+		set personalityValue to ( "#ACTOR#"->GetPersonality )
+
+		; update mercantile
+
+		"#ACTOR#"-> SetMercantile, personalityValue
+
+		; update speechcraft
+
+		"#ACTOR#"-> SetSpeechcraft, personalityValue
+
+		; rollback
+
+		set personalityValue to 0
+

@@ -1,0 +1,154 @@
+		;;;;;;;;;; #ACTOR#
+
+		; get top character's skills
+
+		while (skillIndex <= 26)
+
+			if (skillIndex == 0)
+				set tempSkillValue to ("#ACTOR#"->GetBlock)			
+			elseif (skillIndex == 1)
+				set tempSkillValue to ("#ACTOR#"->GetArmorer)
+			elseif (skillIndex == 2)
+				set tempSkillValue to ("#ACTOR#"->GetMediumArmor)
+			elseif (skillIndex == 3)
+				set tempSkillValue to ("#ACTOR#"->GetHeavyArmor)
+			elseif (skillIndex == 4)
+				set tempSkillValue to ("#ACTOR#"->GetBluntWeapon)
+			elseif (skillIndex == 5)
+				set tempSkillValue to ("#ACTOR#"->GetLongBlade)
+			elseif (skillIndex == 6)
+				set tempSkillValue to ("#ACTOR#"->GetAxe)
+			elseif (skillIndex == 7)
+				set tempSkillValue to ("#ACTOR#"->GetSpear)
+			elseif (skillIndex == 8)
+				set tempSkillValue to ("#ACTOR#"->GetAthletics)
+			elseif (skillIndex == 9)
+				set tempSkillValue to ("#ACTOR#"->GetEnchant)
+			elseif (skillIndex == 10)
+				set tempSkillValue to ("#ACTOR#"->GetDestruction)
+			elseif (skillIndex == 11)
+				set tempSkillValue to ("#ACTOR#"->GetAlteration)
+			elseif (skillIndex == 12)
+				set tempSkillValue to ("#ACTOR#"->GetIllusion)
+			elseif (skillIndex == 13)
+				set tempSkillValue to ("#ACTOR#"->GetConjuration)
+			elseif (skillIndex == 14)
+				set tempSkillValue to ("#ACTOR#"->GetMysticism)
+			elseif (skillIndex == 15)
+				set tempSkillValue to ("#ACTOR#"->GetRestoration)
+			elseif (skillIndex == 16)
+				set tempSkillValue to ("#ACTOR#"->GetAlchemy)
+			elseif (skillIndex == 17)
+				set tempSkillValue to ("#ACTOR#"->GetUnarmored)
+			elseif (skillIndex == 18)
+				set tempSkillValue to ("#ACTOR#"->GetSecurity)
+			elseif (skillIndex == 19)
+				set tempSkillValue to ("#ACTOR#"->GetSneak)
+			elseif (skillIndex == 20)
+				set tempSkillValue to ("#ACTOR#"->GetAcrobatics)
+			elseif (skillIndex == 21)
+				set tempSkillValue to ("#ACTOR#"->GetLightArmor)
+			elseif (skillIndex == 22)
+				set tempSkillValue to ("#ACTOR#"->GetShortBlade)
+			elseif (skillIndex == 23)
+				set tempSkillValue to ("#ACTOR#"->GetMarksman)
+			elseif (skillIndex == 24)
+				set tempSkillValue to ("#ACTOR#"->GetMercantile)
+			elseif (skillIndex == 25)
+				set tempSkillValue to ("#ACTOR#"->GetSpeechcraft)
+			elseif (skillIndex == 26)
+				set tempSkillValue to ("#ACTOR#"->GetHandToHand)
+			else
+				MessageBox, "Less Pushover Merchants - error during establishing top three skills"
+			endif
+
+			if  (tempSkillValue > topSkillValue)
+				set thirdSkillValue to secondSkillValue
+				set thirdSkill to secondSkill
+				set secondSkillValue to topSkillValue
+				set secondSkill to topSkill
+				set topSkillValue to tempSkillValue
+				set topSkill to skillIndex
+			elseif (tempSkillValue > secondSkillValue)
+				set thirdSkillValue to secondSkillValue
+				set thirdSkill to secondSkill
+				set secondSkillValue to tempSkillValue
+				set secondSkill to skillIndex
+			elseif (tempSkillValue > thirdSkillValue)
+				set thirdSkillValue to tempSkillValue
+				set thirdSkill to skillIndex
+			endif
+
+			set skillIndex to (skillIndex + 1)
+			
+		endwhile
+
+		; check if actor is a potential mercantile trainer
+
+		set isMercantileTrainer to 1
+
+		if (topSkill != 24)
+			if (secondSkill != 24)
+				if (thirdSkill != 24)
+					set isMercantileTrainer to 0
+				endif
+			endif
+		endif
+
+		; check if actor is a potential speechcraft trainer
+
+		set isSpeechcraftTrainer to 1
+
+		if (topSkill != 25)
+			if (secondSkill != 25)
+				if (thirdSkill != 25)
+					set isSpeechcraftTrainer to 0
+				endif
+			endif
+		endif
+
+		; get actor's personality
+
+		set personalityValue to ( "#ACTOR#"->GetPersonality )
+
+		; update mercantile
+
+		if (isMercantileTrainer == 0)
+			if (personalityValue > ("#ACTOR#"->GetMercantile))
+				if (personalityValue >= thirdSkillValue)
+					set finalSkillValue to (thirdSkillValue - 1) 
+				else
+					set finalSkillValue to personalityValue
+				endif
+				"#ACTOR#"-> SetMercantile, finalSkillValue
+			endif
+		endif
+
+		; update speechcraft
+
+		if (isSpeechcraftTrainer == 0)
+			if (personalityValue > ("#ACTOR#"->GetMercantile))
+				if (personalityValue >= thirdSkillValue)
+					set finalSkillValue to (thirdSkillValue - 1) 
+				else
+					set finalSkillValue to personalityValue
+				endif
+				"#ACTOR#"-> SetSpeechcraft, finalSkillValue
+			endif
+		endif		
+
+		; rollback
+
+		set skillIndex to 0
+		set tempSkillValue to 0
+		set topSkill to 0
+		set topSkillValue to 0
+		set secondSkill to 0
+		set secondSkillValue to 0
+		set thirdSkill to 0
+		set thirdSkillValue to 0
+		set isMercantileTrainer to 0
+		set isSpeechcraftTrainer to 0
+		set personalityValue to 0
+		set finalSkillValue to 0
+

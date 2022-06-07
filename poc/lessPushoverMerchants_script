@@ -66,14 +66,14 @@ begin NoPushoverMerchants
 	short isMercantileTrainer ; 10 ; faux boolean 1 - true 0 - false
 	short isSpeechcraftTrainer ; 11 ; faux boolean 1 - true 0 - false 
 
-	short actorsPersonality ; 12
+	short personalityValue ; 12
 
 	short finalSkillValue ; 13
 
 	if ( doOnce == 0 )
 		MessageBox, "Less Pushover Merchants Running"
 
-		; flaenia amiulusus
+		;;;;;;;;;; flaenia amiulusus
 
 		; get top character's skills
 
@@ -184,15 +184,15 @@ begin NoPushoverMerchants
 
 		; get actor's personality
 
-		set actorsPersonality to ( "flaenia amiulusus"->GetPersonality )
+		set personalityValue to ( "flaenia amiulusus"->GetPersonality )
 
 		; update mercantile
 
 		if (isMercantileTrainer == 0)
-			if (actorsPersonality >= thirdSkillValue)
+			if (personalityValue >= thirdSkillValue)
 				set finalSkillValue to (thirdSkillValue - 1) 
 			else
-				set finalSkillValue to actorsPersonality
+				set finalSkillValue to personalityValue
 			endif
 			"flaenia amiulusus"-> SetMercantile, finalSkillValue
 		endif
@@ -200,13 +200,28 @@ begin NoPushoverMerchants
 		; update speechcraft
 
 		if (isSpeechcraftTrainer == 0)
-			if (actorsPersonality >= thirdSkillValue)
+			if (personalityValue >= thirdSkillValue)
 				set finalSkillValue to (thirdSkillValue - 1) 
 			else
-				set finalSkillValue to actorsPersonality
+				set finalSkillValue to personalityValue
 			endif
 			"flaenia amiulusus"-> SetSpeechcraft, finalSkillValue
 		endif		
+
+		; rollback
+
+		set skillIndex to 0
+		set tempSkillValue to 0
+		set topSkill to 0
+		set topSkillValue to 0
+		set secondSkill to 0
+		set secondSkillValue to 0
+		set thirdSkill to 0
+		set thirdSkillValue to 0
+		set isMercantileTrainer to 0
+		set isSpeechcraftTrainer to 0
+		set personalityValue to 0
+		set finalSkillValue to 0
 
 		MessageBox, "Merchants' and trainers' stats updated"
 		stopscript, NoPushoverMerchants

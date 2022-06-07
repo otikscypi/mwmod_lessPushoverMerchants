@@ -1,0 +1,7 @@
+		MessageBox, "Less Pushover Merchants - merchants' stats updated"
+		stopscript, lessPushoverMerchantsStronger
+
+		Set doOnce to -1
+	endif
+
+End lessPushoverMerchantsStronger

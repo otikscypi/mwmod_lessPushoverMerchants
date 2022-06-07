@@ -1,0 +1,74 @@
+;****************************************************************************************
+;**		Less Pushover Merchants 1.0
+;**		Created by otikscypi
+;**		Inspired by No Pushover Merchants 2.0 by ComradeSokami
+;****************************************************************************************
+
+; Version 0.1 - PoC, only single trainer
+; Version 0.2 - PoC, code refactor
+; Version 1.0 - 3x files: 1. only traders, who are not trainers, with max skill 2. only traders, who are not trainers, with safe skill 3. trainers, with safe skill
+; Version 2.0 - (planned) rewrite to use LUA after OpenMW 0.48 will go stable
+;
+; For an actor check all his/hers skills. Select top three skills and their values.
+; Check also the Personality of the actor.
+;; If there is Mercantile among top three skills - do not change it value
+;; If there is no Mercantile, check if Personality is larger then lowest skill 
+;;; If it is take the value of the lowest of the top skills, subtract 1 and set Mercantile to this value
+;;; If it is not take the value of the Personality and set Mercantile to this value
+;; Repeat for Speechcraft
+; Repeat for every actor subject to rebalance
+;
+; Index of top three skills
+;
+; 0 - Block
+; 1 - Armorer
+; 2 - MediumArmor
+; 3 - HeavyArmor
+; 4 - BluntWeapon
+; 5 - LongBlade
+; 6 - Axe
+; 7 - Spear
+; 8 - Athletics
+; 9 - Enchant
+; 10 - Destruction
+; 11 - Alteration
+; 12 - Illusion
+; 13 - Conjuration
+; 14 - Mysticism
+; 15 - Restoration
+; 16 - Alchemy
+; 17 - Unarmored
+; 18 - Security
+; 19 - Sneak
+; 20 - Acrobatics
+; 21 - LightArmor
+; 22 - ShortBlade
+; 23 - Marksman
+; 24 - Mercantile
+; 25 - Speechcraft
+; 26 - HandToHand
+
+
+begin lessPushoverEnchantersSafer
+
+	short doOnce ; 1
+
+	short skillIndex ; 2
+	short tempSkillValue ; 3
+
+	short topSkill ; 4
+	short topSkillValue ; 5
+	short secondSkill ; 6
+	short secondSkillValue ; 7
+	short thirdSkill ; 8
+	short thirdSkillValue ; 9
+
+	short isMercantileTrainer ; 10 ; faux boolean 1 - true 0 - false
+	short isSpeechcraftTrainer ; 11 ; faux boolean 1 - true 0 - false 
+
+	short personalityValue ; 12
+
+	short finalSkillValue ; 13
+
+	if ( doOnce == 0 )
+
