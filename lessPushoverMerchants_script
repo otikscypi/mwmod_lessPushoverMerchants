@@ -1,11 +1,12 @@
 ;****************************************************************************************
-;**		Less Pushover Merchants 0.1
+;**		Less Pushover Merchants 0.2
 ;**		Based on No Pushover Merchants 2.0 by ComradeSokami
 ;**		Created by otikscypi
 ;****************************************************************************************
 
 ; Version 0.1 - PoC, only single trainer
-; Version 1.0 - only traders, how are not trainers 
+; Version 0.2 - PoC, code refactor
+; Version 1.0 - 3x ESP: 1. only traders, who are not trainers, with max skill 2. only traders, who are not trainers, with safe skill, 3. trainers
 ; Version 2.0 - everyone
 ;
 ; For an actor check all his/hers skills. Select top three skills and their values.
@@ -17,7 +18,7 @@
 ;; Repeat for Speechcraft
 ; Repeat for every actor subject to rebalance
 ;
-; List of values that top three skills can take
+; Index of top three skills
 ;
 ; 0 - Block
 ; 1 - Armorer
@@ -50,495 +51,161 @@
 
 begin NoPushoverMerchants
 
-	short actorsPersonality ; 1
-	short isMercantileTrainer ; 2
-	short isSpeechcraftTrainer ; 3
+	short doOnce ; 1
+
+	short skillIndex ; 2
+	short tempSkillValue ; 3
+
 	short topSkill ; 4
 	short topSkillValue ; 5
 	short secondSkill ; 6
 	short secondSkillValue ; 7
 	short thirdSkill ; 8
 	short thirdSkillValue ; 9
-	short tempSkillValue ; 10
-	short doOnce ; 11
+
+	short isMercantileTrainer ; 10 ; faux boolean 1 - true 0 - false
+	short isSpeechcraftTrainer ; 11 ; faux boolean 1 - true 0 - false 
+
+	short actorsPersonality ; 12
+
+	short finalSkillValue ; 13
 
 	if ( doOnce == 0 )
 		MessageBox, "Less Pushover Merchants Running"
 
 		; flaenia amiulusus
+
 		; get top character's skills
-		
-		set topSkillValue to ("flaenia amiulusus"->GetBlock)
-		set topSkill to 0 ; explicitly set just for clarity
-		
-		if  (("flaenia amiulusus"->GetArmorer) > topSkillValue)
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetArmorer)
-			set topSkill to 1
-		else
-			set secondSkillValue to ("flaenia amiulusus"->GetArmorer)
-			set secondSkill to 1
-		endif
-		
-		if  (("flaenia amiulusus"->GetMediumArmor) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetMediumArmor)
-			set topSkill to 2
-		elseif (("flaenia amiulusus"->GetMediumArmor) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetMediumArmor)
-			set secondSkill to 2
-		else
-			set thirdSkillValue to ("flaenia amiulusus"->GetMediumArmor)
-			set thirdSkill to 2
+
+		while (skillIndex <= 26)
+
+			if (skillIndex == 0)
+				set tempSkillValue to ("flaenia amiulusus"->GetBlock)			
+			elseif (skillIndex == 1)
+				set tempSkillValue to ("flaenia amiulusus"->GetArmorer)
+			elseif (skillIndex == 2)
+				set tempSkillValue to ("flaenia amiulusus"->GetMediumArmor)
+			elseif (skillIndex == 3)
+				set tempSkillValue to ("flaenia amiulusus"->GetHeavyArmor)
+			elseif (skillIndex == 4)
+				set tempSkillValue to ("flaenia amiulusus"->GetBluntWeapon)
+			elseif (skillIndex == 5)
+				set tempSkillValue to ("flaenia amiulusus"->GetLongBlade)
+			elseif (skillIndex == 6)
+				set tempSkillValue to ("flaenia amiulusus"->GetAxe)
+			elseif (skillIndex == 7)
+				set tempSkillValue to ("flaenia amiulusus"->GetSpear)
+			elseif (skillIndex == 8)
+				set tempSkillValue to ("flaenia amiulusus"->GetAthletics)
+			elseif (skillIndex == 9)
+				set tempSkillValue to ("flaenia amiulusus"->GetEnchant)
+			elseif (skillIndex == 10)
+				set tempSkillValue to ("flaenia amiulusus"->GetDestruction)
+			elseif (skillIndex == 11)
+				set tempSkillValue to ("flaenia amiulusus"->GetAlteration)
+			elseif (skillIndex == 12)
+				set tempSkillValue to ("flaenia amiulusus"->GetIllusion)
+			elseif (skillIndex == 13)
+				set tempSkillValue to ("flaenia amiulusus"->GetConjuration)
+			elseif (skillIndex == 14)
+				set tempSkillValue to ("flaenia amiulusus"->GetMysticism)
+			elseif (skillIndex == 15)
+				set tempSkillValue to ("flaenia amiulusus"->GetRestoration)
+			elseif (skillIndex == 16)
+				set tempSkillValue to ("flaenia amiulusus"->GetAlchemy)
+			elseif (skillIndex == 17)
+				set tempSkillValue to ("flaenia amiulusus"->GetUnarmored)
+			elseif (skillIndex == 18)
+				set tempSkillValue to ("flaenia amiulusus"->GetSecurity)
+			elseif (skillIndex == 19)
+				set tempSkillValue to ("flaenia amiulusus"->GetSneak)
+			elseif (skillIndex == 20)
+				set tempSkillValue to ("flaenia amiulusus"->GetAcrobatics)
+			elseif (skillIndex == 21)
+				set tempSkillValue to ("flaenia amiulusus"->GetLightArmor)
+			elseif (skillIndex == 22)
+				set tempSkillValue to ("flaenia amiulusus"->GetShortBlade)
+			elseif (skillIndex == 23)
+				set tempSkillValue to ("flaenia amiulusus"->GetMarksman)
+			elseif (skillIndex == 24)
+				set tempSkillValue to ("flaenia amiulusus"->GetMercantile)
+			elseif (skillIndex == 25)
+				set tempSkillValue to ("flaenia amiulusus"->GetSpeechcraft)
+			elseif (skillIndex == 26)
+				set tempSkillValue to ("flaenia amiulusus"->GetHandToHand)
+			else
+				MessageBox, "Less Pushover Merchants - error during establishing top three skills"
+			endif
+
+			if  (tempSkillValue > topSkillValue)
+				set thirdSkillValue to secondSkillValue
+				set thirdSkill to secondSkill
+				set secondSkillValue to topSkillValue
+				set secondSkill to topSkill
+				set topSkillValue to tempSkillValue
+				set topSkill to skillIndex
+			elseif (tempSkillValue > secondSkillValue)
+				set thirdSkillValue to secondSkillValue
+				set thirdSkill to secondSkill
+				set secondSkillValue to tempSkillValue
+				set secondSkill to skillIndex
+			elseif (tempSkillValue > thirdSkillValue)
+				set thirdSkillValue to tempSkillValue
+				set thirdSkill to skillIndex
+			endif
+
+			set skillIndex to (skillIndex + 1)
+			
+		endwhile
+
+		; check if actor is a potential mercantile trainer
+
+		set isMercantileTrainer to 1
+
+		if (topSkill != 24)
+			if (secondSkill != 24)
+				if (thirdSkill != 24)
+					set isMercantileTrainer to 0
+				endif
+			endif
 		endif
 
-		if  (("flaenia amiulusus"->GetHeavyArmor) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetHeavyArmor)
-			set topSkill to 3
-		elseif (("flaenia amiulusus"->GetHeavyArmor) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetHeavyArmor)
-			set secondSkill to 3
-		elseif (("flaenia amiulusus"->GetHeavyArmor) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetHeavyArmor)
-			set thirdSkill to 3
+		; check if actor is a potential speechcraft trainer
+
+		set isSpeechcraftTrainer to 1
+
+		if (topSkill != 25)
+			if (secondSkill != 25)
+				if (thirdSkill != 25)
+					set isSpeechcraftTrainer to 0
+				endif
+			endif
 		endif
 
-		if  (("flaenia amiulusus"->GetBluntWeapon) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetBluntWeapon)
-			set topSkill to 4
-		elseif (("flaenia amiulusus"->GetBluntWeapon) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetBluntWeapon)
-			set secondSkill to 4
-		elseif (("flaenia amiulusus"->GetBluntWeapon) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetBluntWeapon)
-			set thirdSkill to 4
-		endif
-
-		if  (("flaenia amiulusus"->GetLongBlade) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetLongBlade)
-			set topSkill to 5
-		elseif (("flaenia amiulusus"->GetLongBlade) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetLongBlade)
-			set secondSkill to 5
-		elseif (("flaenia amiulusus"->GetLongBlade) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetLongBlade)
-			set thirdSkill to 5
-		endif
-
-		if  (("flaenia amiulusus"->GetAxe) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetAxe)
-			set topSkill to 6
-		elseif (("flaenia amiulusus"->GetAxe) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetAxe)
-			set secondSkill to 6
-		elseif (("flaenia amiulusus"->GetAxe) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetAxe)
-			set thirdSkill to 6
-		endif
-
-		if  (("flaenia amiulusus"->GetSpear) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetSpear)
-			set topSkill to 7
-		elseif (("flaenia amiulusus"->GetSpear) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetSpear)
-			set secondSkill to 7
-		elseif (("flaenia amiulusus"->GetSpear) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetSpear)
-			set thirdSkill to 7
-		endif
-
-		if  (("flaenia amiulusus"->GetAthletics) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetAthletics)
-			set topSkill to 8
-		elseif (("flaenia amiulusus"->GetAthletics) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetAthletics)
-			set secondSkill to 8
-		elseif (("flaenia amiulusus"->GetAthletics) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetAthletics)
-			set thirdSkill to 8
-		endif
-
-		if  (("flaenia amiulusus"->GetEnchant) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetEnchant)
-			set topSkill to 9
-		elseif (("flaenia amiulusus"->GetEnchant) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetEnchant)
-			set secondSkill to 9
-		elseif (("flaenia amiulusus"->GetEnchant) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetEnchant)
-			set thirdSkill to 9
-		endif
-
-		if  (("flaenia amiulusus"->GetDestruction) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetDestruction)
-			set topSkill to 10
-		elseif (("flaenia amiulusus"->GetDestruction) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetDestruction)
-			set secondSkill to 10
-		elseif (("flaenia amiulusus"->GetDestruction) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetDestruction)
-			set thirdSkill to 10
-		endif
-
-		if  (("flaenia amiulusus"->GetAlteration) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetAlteration)
-			set topSkill to 11
-		elseif (("flaenia amiulusus"->GetAlteration) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetAlteration)
-			set secondSkill to 11
-		elseif (("flaenia amiulusus"->GetAlteration) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetAlteration)
-			set thirdSkill to 11
-		endif
-
-		if  (("flaenia amiulusus"->GetIllusion) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetIllusion)
-			set topSkill to 12
-		elseif (("flaenia amiulusus"->GetIllusion) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetIllusion)
-			set secondSkill to 12
-		elseif (("flaenia amiulusus"->GetIllusion) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetIllusion)
-			set thirdSkill to 12
-		endif
-
-		if  (("flaenia amiulusus"->GetConjuration) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetConjuration)
-			set topSkill to 13
-		elseif (("flaenia amiulusus"->GetConjuration) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetConjuration)
-			set secondSkill to 13
-		elseif (("flaenia amiulusus"->GetConjuration) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetConjuration)
-			set thirdSkill to 13
-		endif
-
-		if  (("flaenia amiulusus"->GetMysticism) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetMysticism)
-			set topSkill to 14
-		elseif (("flaenia amiulusus"->GetMysticism) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetMysticism)
-			set secondSkill to 14
-		elseif (("flaenia amiulusus"->GetMysticism) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetMysticism)
-			set thirdSkill to 14
-		endif
-
-		if  (("flaenia amiulusus"->GetRestoration) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetRestoration)
-			set topSkill to 15
-		elseif (("flaenia amiulusus"->GetRestoration) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetRestoration)
-			set secondSkill to 15
-		elseif (("flaenia amiulusus"->GetRestoration) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetRestoration)
-			set thirdSkill to 15
-		endif
-
-		if  (("flaenia amiulusus"->GetAlchemy) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetAlchemy)
-			set topSkill to 16
-		elseif (("flaenia amiulusus"->GetAlchemy) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetAlchemy)
-			set secondSkill to 16
-		elseif (("flaenia amiulusus"->GetAlchemy) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetAlchemy)
-			set thirdSkill to 16
-		endif
-
-		if  (("flaenia amiulusus"->GetUnarmored) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetUnarmored)
-			set topSkill to 17
-		elseif (("flaenia amiulusus"->GetUnarmored) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetUnarmored)
-			set secondSkill to 17
-		elseif (("flaenia amiulusus"->GetUnarmored) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetUnarmored)
-			set thirdSkill to 17
-		endif
-
-		if  (("flaenia amiulusus"->GetSecurity) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetSecurity)
-			set topSkill to 18
-		elseif (("flaenia amiulusus"->GetSecurity) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetSecurity)
-			set secondSkill to 18
-		elseif (("flaenia amiulusus"->GetSecurity) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetSecurity)
-			set thirdSkill to 18
-		endif
-
-		if  (("flaenia amiulusus"->GetSneak) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetSneak)
-			set topSkill to 19
-		elseif (("flaenia amiulusus"->GetSneak) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetSneak)
-			set secondSkill to 19
-		elseif (("flaenia amiulusus"->GetSneak) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetSneak)
-			set thirdSkill to 19
-		endif
-
-		if  (("flaenia amiulusus"->GetAcrobatics) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetAcrobatics)
-			set topSkill to 20
-		elseif (("flaenia amiulusus"->GetAcrobatics) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetAcrobatics)
-			set secondSkill to 20
-		elseif (("flaenia amiulusus"->GetAcrobatics) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetAcrobatics)
-			set thirdSkill to 20
-		endif
-
-		if  (("flaenia amiulusus"->GetLightArmor) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetLightArmor)
-			set topSkill to 21
-		elseif (("flaenia amiulusus"->GetLightArmor) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetLightArmor)
-			set secondSkill to 21
-		elseif (("flaenia amiulusus"->GetLightArmor) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetLightArmor)
-			set thirdSkill to 21
-		endif
-
-		if  (("flaenia amiulusus"->GetShortBlade) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetShortBlade)
-			set topSkill to 22
-		elseif (("flaenia amiulusus"->GetShortBlade) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetShortBlade)
-			set secondSkill to 22
-		elseif (("flaenia amiulusus"->GetShortBlade) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetShortBlade)
-			set thirdSkill to 22
-		endif
-
-		if  (("flaenia amiulusus"->GetMarksman) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetMarksman)
-			set topSkill to 23
-		elseif (("flaenia amiulusus"->GetMarksman) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetMarksman)
-			set secondSkill to 23
-		elseif (("flaenia amiulusus"->GetMarksman) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetMarksman)
-			set thirdSkill to 23
-		endif
-
-		if  (("flaenia amiulusus"->GetMercantile) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetMercantile)
-			set topSkill to 24
-		elseif (("flaenia amiulusus"->GetMercantile) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetMercantile)
-			set secondSkill to 24
-		elseif (("flaenia amiulusus"->GetMercantile) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetMercantile)
-			set thirdSkill to 24
-		endif
-
-		if  (("flaenia amiulusus"->GetSpeechcraft) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetSpeechcraft)
-			set topSkill to 25
-		elseif (("flaenia amiulusus"->GetSpeechcraft) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetSpeechcraft)
-			set secondSkill to 25
-		elseif (("flaenia amiulusus"->GetSpeechcraft) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetSpeechcraft)
-			set thirdSkill to 25
-		endif
-
-		if  (("flaenia amiulusus"->GetHandToHand) > topSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to topSkillValue
-			set secondSkill to topSkill
-			set topSkillValue to ("flaenia amiulusus"->GetHandToHand)
-			set topSkill to 26
-		elseif (("flaenia amiulusus"->GetHandToHand) > secondSkillValue)
-			set thirdSkillValue to secondSkillValue
-			set thirdSkill to secondSkill
-			set secondSkillValue to ("flaenia amiulusus"->GetHandToHand)
-			set secondSkill to 26
-		elseif (("flaenia amiulusus"->GetHandToHand) > thirdSkillValue)
-			set thirdSkillValue to ("flaenia amiulusus"->GetHandToHand)
-			set thirdSkill to 26
-		endif
-
-		; end of establishing top three skills
 		; get actor's personality
 
 		set actorsPersonality to ( "flaenia amiulusus"->GetPersonality )
 
 		; update mercantile
 
-		if (topSkill != 24)
-			if (secondSkill != 24)
-				if (thirdSkill != 24)
-					if (actorsPersonality >= thirdSkillValue)
-						set tempSkillValue to (thirdSkillValue - 1) 
-						"flaenia amiulusus"-> SetMercantile, tempSkillValue
-					else
-						"flaenia amiulusus"-> SetMercantile, actorsPersonality
-					endif
-				endif
+		if (isMercantileTrainer == 0)
+			if (actorsPersonality >= thirdSkillValue)
+				set finalSkillValue to (thirdSkillValue - 1) 
+			else
+				set finalSkillValue to actorsPersonality
 			endif
+			"flaenia amiulusus"-> SetMercantile, finalSkillValue
 		endif
 
 		; update speechcraft
 
-		if (topSkill != 25)
-			if (secondSkill != 25)
-				if (thirdSkill != 25)
-					if (actorsPersonality >= thirdSkillValue)
-						set tempSkillValue to (thirdSkillValue - 1) 
-						"flaenia amiulusus"->SetSpeechcraft, tempSkillValue
-					else
-						"flaenia amiulusus"->SetSpeechcraft, actorsPersonality
-					endif
-				endif
+		if (isSpeechcraftTrainer == 0)
+			if (actorsPersonality >= thirdSkillValue)
+				set finalSkillValue to (thirdSkillValue - 1) 
+			else
+				set finalSkillValue to actorsPersonality
 			endif
+			"flaenia amiulusus"-> SetSpeechcraft, finalSkillValue
 		endif		
 
 		MessageBox, "Merchants' and trainers' stats updated"
