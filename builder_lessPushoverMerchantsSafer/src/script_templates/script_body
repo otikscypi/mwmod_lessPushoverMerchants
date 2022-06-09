@@ -127,7 +127,7 @@
 		; update speechcraft
 
 		if (isSpeechcraftTrainer == 0)
-			if (personalityValue > ("#ACTOR#"->GetMercantile))
+			if (personalityValue > ("#ACTOR#"->GetSpeechcraft))
 				if (personalityValue >= thirdSkillValue)
 					set finalSkillValue to (thirdSkillValue - 1) 
 				else

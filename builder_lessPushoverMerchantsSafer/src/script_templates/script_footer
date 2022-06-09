@@ -1,7 +1,7 @@
-		MessageBox, "Less Pushover Merchants - merchants' stats updated"
-		stopscript, lessPushoverMerchantsSafer
+		MessageBox, "Less Pushover Merchants#SCRIPT_SUFFIX# - merchants' stats updated"
+		stopscript, #SCRIPT_PREFIX#LPMSafer#SCRIPT_SUFFIX#
 
 		Set doOnce to -1
 	endif
 
-End lessPushoverMerchantsSafer
+End #SCRIPT_PREFIX#LPMSafer#SCRIPT_SUFFIX#
